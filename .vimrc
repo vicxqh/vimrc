@@ -19,7 +19,7 @@ Plugin 'VundleVim/Vundle.vim'
 
 "Plugins
 Plugin 'scrooloose/nerdtree'
-Plugin 'flazz/vim-colorschemes'
+Plugin 'tomasr/molokai'
 Plugin 'valloric/youcompleteme'
 
 " All of your Plugins must be added before the following line
@@ -37,8 +37,7 @@ filetype plugin indent on    " required
 " see :h vundle for more details or wiki for FAQ
 " Put your non-Plugin stuff after this line
 
-" Color scheme
-colorscheme molokai
+
 
 
 " Open/close nerdtree
