@@ -6,10 +6,10 @@ set linespace=0                 " No extra spaces between rows
 set hlsearch                    " Highlight search terms
 set nowrap                      " Do not wrap long lines
 set autoindent                  " Indent at the same level of the previous line
-"set shiftwidth=2                " Use indents of 4 spaces
-"set expandtab                   " Tabs are spaces, not tabs
-"set tabstop=2                   " An indentation every four columns
-"set softtabstop=2               " Let backspace delete indent
+set shiftwidth=3                " Use indents of 4 spaces
+set expandtab                   " Tabs are spaces, not tabs
+set tabstop=3                   " An indentation every four columns
+set softtabstop=3               " Let backspace delete indent
 
 "set expandtab
 " XW: Using Vundle to manage plugin
