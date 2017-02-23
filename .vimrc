@@ -31,9 +31,11 @@ Plugin 'flazz/vim-colorschemes'
 Plugin 'jiangmiao/auto-pairs'
 Plugin 'vim-airline/vim-airline'
 Plugin 'majutsushi/tagbar'
+Plugin 'shougo/neocomplete.vim'
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
+set omnifunc=syntaxcomplete#Complete
 " To ignore plugin indent changes, instead use:
 "filetype plugin on
 "
@@ -45,8 +47,11 @@ filetype plugin indent on    " required
 "
 " see :h vundle for more details or wiki for FAQ
 " Put your non-Plugin stuff after this line
+"
+
 
 colorscheme molokai
+
 
 " For airline
 set laststatus=2
@@ -55,10 +60,12 @@ set t_Co=256
 let g:airline#extensions#whitespace#enabled = 0
 let g:airline#extensions#whitespace#symbol = '!'
 
+
 " Open/close nerdtree
 map <C-e> :NERDTreeToggle<CR>
 " Open/close Tagbarr
 map <C-t> :TagbarToggle<CR>
+
 
 " highlight trailing whitespace
 highlight ExtraWhitespace ctermbg=red guibg=red
@@ -68,53 +75,67 @@ autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
 autocmd InsertLeave * match ExtraWhitespace /\s\+$/
 autocmd BufWinLeave * call clearmatches()
 
-" This tests to see if vim was configured with the '--enable-cscope' option
-" when it was compiled.  If it wasn't, time to recompile vim...
-if has("cscope")
 
-    " use both cscope and ctag for 'ctrl-]', ':ta', and 'vim -t'
-    set cscopetag
+" NeoComplete
+"Note: This option must be set in .vimrc(_vimrc).  NOT IN .gvimrc(_gvimrc)!
+" Disable AutoComplPop.
+let g:acp_enableAtStartup = 0
+" Use neocomplete.
+let g:neocomplete#enable_at_startup = 1
+" Use smartcase.
+let g:neocomplete#enable_smart_case = 1
+" Set minimum syntax keyword length.
+let g:neocomplete#sources#syntax#min_keyword_length = 3
 
-    " check cscope for definition of a symbol before checking ctags: set to 1
-    " if you want the reverse search order.
-    set csto=0
-    
-    " add any cscope database in current directory
-    if filereadable("cscope.out")
-        cs add cscope.out
-    " else add the database pointed to by environment variable
-    elseif $CSCOPE_DB != ""
-        cs add $CSCOPE_DB
-    endif
+" Define dictionary.
+let g:neocomplete#sources#dictionary#dictionaries = {
+    \ 'default' : '',
+    \ 'vimshell' : $HOME.'/.vimshell_hist',
+    \ 'scheme' : $HOME.'/.gosh_completions'
+        \ }
 
-    " show msg when any other cscope db added
-    set cscopeverbose
-
-
-    """"""""""""" My cscope/vim key mappings
-    "
-    " The following maps all invoke one of the following cscope search types:
-    "
-    "   's'   symbol: find all references to the token under cursor
-    "   'g'   global: find global definition(s) of the token under cursor
-    "   'c'   calls:  find all calls to the f"unction name under cursor
-     "   't'   text:   find all instances of the text under cursor
-    "   'e'   egrep:  egrep search for the word under cursor
-    "   'f'   file:   open the filename under cursor
-    "   'i'   includes: find files that include the filename under cursor
-    "   'd'   called: find functions that function under cursor calls
-    "
-
-    nmap <C-@>s :cs find s <C-R>=expand("<cword>")<CR><CR>  
-    nmap <C-@>g :cs find g <C-R>=expand("<cword>")<CR><CR>  
-    nmap <C-@>c :cs find c <C-R>=expand("<cword>")<CR><CR>  
-    nmap <C-@>t :cs find t <C-R>=expand("<cword>")<CR><CR>  
-    nmap <C-@>e :cs find e <C-R>=expand("<cword>")<CR><CR>  
-    nmap <C-@>f :cs find f <C-R>=expand("<cfile>")<CR><CR>  
-    nmap <C-@>i :cs find i ^<C-R>=expand("<cfile>")<CR>$<CR>   
-    nmap <C-@>d :cs find d <C-R>=expand("<cword>")<CR><CR>  
-
-    set cscopequickfix=s-,c-,d-,i-,t-,e-,a-
-    nmap <C-n> :cnext<CR>
-    nmap <C-p> :cprev<CR> 
+" Define keyword.
+if !exists('g:neocomplete#keyword_patterns')
+    let g:neocomplete#keyword_patterns = {}
 endif
+let g:neocomplete#keyword_patterns['default'] = '\h\w*'
+
+
+" Recommended key-mappings.
+" <TAB>: completion.
+inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+" <C-h>, <BS>: close popup and delete backword char.
+" inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
+inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
+" Close popup by <Space>.
+inoremap <expr><Space> pumvisible() ? "\<C-y>" : "\<Space>"
+
+" AutoComplPop like behavior.
+"let g:neocomplete#enable_auto_select = 1
+
+" Enable omni completion.
+autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
+autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
+autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
+autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+
+
+" Enable heavy omni completion.
+if !exists('g:neocomplete#sources#omni#input_patterns')
+  let g:neocomplete#sources#omni#input_patterns = {}
+endif
+let g:neocomplete#sources#omni#input_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
+let g:neocomplete#sources#omni#input_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
+let g:neocomplete#sources#omni#input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
+
+
+function! SetupPython()
+    " Here, you can have the final say on what is set.  So
+    " fixup any settings you don't like.
+    setlocal softtabstop=3
+    setlocal tabstop=3
+    setlocal shiftwidth=3
+endfunction
+command! -bar SetupPython call SetupPython()
+autocmd FileType python SetupPython
