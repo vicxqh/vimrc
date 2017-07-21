@@ -11,6 +11,7 @@ set expandtab                   " Tabs are spaces, not tabs
 set tabstop=3                   " An indentation every four columns
 set softtabstop=3               " Let backspace delete indent
 set ignorecase                  " Search in case insensitive mode"
+set cursorline                  " Highlight current line
 
 " XW: Using Vundle to manage plugin
 set nocompatible              " be iMproved, required
@@ -49,20 +50,19 @@ set omnifunc=syntaxcomplete#Complete
 " Put your non-Plugin stuff after this line
 "
 
-
-colorscheme molokai
+colorscheme github 
 
 
 " For airline
-set laststatus=2
+" set laststatus=2
 let g:airline#extensions#tabline#enabled = 1
 set t_Co=256
-let g:airline#extensions#whitespace#enabled = 0
-let g:airline#extensions#whitespace#symbol = '!'
+" let g:airline#extensions#whitespace#enabled = 0
+" let g:airline#extensions#whitespace#symbol = '!'
 
 
 " Open/close nerdtree
-map <C-e> :NERDTreeToggle<CR>
+map <C-e> :NERDTreeToggle %<CR>
 " Open/close Tagbarr
 map <C-t> :TagbarToggle<CR>
 
@@ -106,7 +106,7 @@ let g:neocomplete#keyword_patterns['default'] = '\h\w*'
 inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
 " <C-h>, <BS>: close popup and delete backword char.
 " inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
-inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
+" inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
 " Close popup by <Space>.
 inoremap <expr><Space> pumvisible() ? "\<C-y>" : "\<Space>"
 
@@ -133,6 +133,7 @@ let g:neocomplete#sources#omni#input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\
 function! SetupPython()
     " Here, you can have the final say on what is set.  So
     " fixup any settings you don't like.
+    setlocal expandtab
     setlocal softtabstop=3
     setlocal tabstop=3
     setlocal shiftwidth=3
